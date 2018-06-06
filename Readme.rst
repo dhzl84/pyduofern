@@ -44,37 +44,11 @@ License::
 Getting Started
 ===============
 
-To install the python module run ``python setup.py install`` if you downloaded
-the sources already or use the convenience mechanism and run::
+Put the cover component file to your custom_components folder::
 
-     pip3 install git+https://github.com/gluap/pyduofern.git
+    config\custom_components\cover\duofern.py
 
-
-or if you previously installed the package::
-
-     pip3 install --ugprade git+https://github.com/gluap/pyduofern.git
-
-udev configuration
-==================
-to make your usb stick easy to identify deploy an `udev rules <https://wiki.debian.org/udev>`_ file in
-``/etc/udev/rules.d/98-duofern.rules`` or the equivalent of your distribution. The following worked for my
-stick::
-
-    SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK+="duofernstick"
-
-Or, if you use several USB-Serial adapters with vendor ``0403`` and product ``6001`` find out the serial number of your
-stick (assuming it is currently registered as ``/dev/ttyUSB0```)::
-
-    user@host:~ > udevadm info -a -n /dev/ttyUSB0 | grep '{serial}' | head -n1
-    ATTRS{serial}=="WR04ZFP4"
-
-As you can se for me the serial is ``WR04ZFP4``. Use the following udev line (use the serial you found above)::
-
-    SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="WR04ZFP4", SYMLINK+="duofernstick"
-
-Once the rule is deployed your stick should show up as ``/dev/duofernstick`` as soon as you plug it in. This
-helps avoid confusion if you use other usb-serial devices. Also be warned: The line also makes the stick
-accessible to non-root users. But likely on your system you will be the only user anyhow.
+After restarting HA the necessary python module will be installed automatically from GitHub.
 
 Getting Started
 ===============
