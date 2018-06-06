@@ -8,11 +8,6 @@ import voluptuous as vol
 # Import the device class from the component that you want to support
 from homeassistant.components.cover import ATTR_POSITION, CoverDevice, PLATFORM_SCHEMA
 
-# Home Assistant depends on 3rd party packages for API specific code.
-REQUIREMENTS = ['pyduofern']
-
-from pyduofern.duofern_stick import DuofernStickThreaded
-
 _LOGGER = logging.getLogger(__name__)
 
 # Validation of the user's configuration
@@ -22,8 +17,13 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional('code', default=None): cv.string,
 })
 
+    # Home Assistant depends on 3rd party packages for API specific code.
+REQUIREMENTS = ['https://github.com/gluap/pyduofern/archive/master.zip#pyduofern']
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
+
+    from pyduofern.duofern_stick import DuofernStickThreaded
+
     """Setup the Awesome Light platform."""
 
     # Assign configuration variables. The configuration check takes care they are
