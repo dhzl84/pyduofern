@@ -1,7 +1,6 @@
 *.pm
 *.pyc
 **/coverage/*
-*.pm
 build/**
 coverage/**
 dist/**
@@ -10,3 +9,5 @@ dist/**
 .idea/**
 **/du*ern.json
 **/mysensors.json
+*.project
+*.pydevproject

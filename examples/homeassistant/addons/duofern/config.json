@@ -1,0 +1,12 @@
+{
+  "name": "Rademacher DuoFern Roller Shutter",
+  "version": "0.1",
+  "slug": "duofern",
+  "description": "Pair Rademacher DuoFern Roller Shutters",
+  "startup": "once",
+  "boot": "manual",
+  "map": ["config:rw", "share:rw"],
+  "devices": ["/dev/ttyUSB2:/dev/ttyUSB2:rwm"],
+  "schema": {},
+  "options": {}
+}
