@@ -41,96 +41,63 @@ License::
    along with this program; if not, write to the Free Software Foundation,
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
-Getting Started
-===============
+Setup custom component
+=======================
 
 Put the cover component file to your custom_components folder::
 
     config\custom_components\cover\duofern.py
 
-After restarting HA the necessary python module will be installed automatically from GitHub.
+After restarting HA the necessary python module will be installed automatically from GitHub
 
-Getting Started
+Put the duofern addon to your addons folder::
+
+    addons\duofern\Dockerfile
+    addons\duofern\config.json
+    addons\duofern\run.sh
+
+Setup addon
 ===============
-To start using your stick you can use the ``duofern_cli.py`` script which should have been installed together
-with the pyduofern module. Begin by choosing a 4 hex-digit system code. Ideally write it down, if you forget
-it, you will likely have to chose a new system code and reset your devices in order to be able to pair them again.
-It is also a security feature which is why no default is provided.
 
-Decide for a system configuration file. By default it will reside as a hidden config file in your home directory in
-``~/.duofern.json``. Pass the config file to ``duofern_cli.py`` via the command line option ``--configfile``.
-The default has the advantage that you do not always have to pass the config file when using the script. Initialize
-the config file with your system code with the following command::
+To access the DuoFern Stick inside the addon, it must be mapped in the config.json file::
 
-   duofern_cli.py --code <your chosen 4 digit hex code here>
-   # or if you prefer your own configfile location
-   doufern_cli.py --code <your chosen 4 digit hex code here> --configfile <your config file path>
+    addons\duofern\config.json
 
-Now RTFM of the shutter to find out how to start pairing. Set the maximum and minimum positions according to the manual.
-If you want to experiment with the shutter first, chose the two positions very near each other. The motors shut down
-after a certain maximum runtime and you could exceed that while experimenting if you move the shutters up and down
-several times unless the min and max positions are close to each other.
+In my installation the DuoFern Stick is "/dev/ttyUSB2" and I just map it with the same name into the addon::
 
-Start out by pairing your first rollershutter::
+    "devices": ["/dev/ttyUSB2:/dev/ttyUSB2:rwm"],
 
-    duofern_cli.py --pair --pairtime 60
+For minimum changes to other files I suggest to just change the name of the duoFern Stick in the host system.
 
-now initiate pairing via the buttons on your shutter. Once a shutter is paired it should show up in your
-config file and you can name it. Say the blind that popped up has the ID ``408ea2``, run the following to give it
-the name ``kitchen``::
 
-    duofern_cli.py --set_name 408ea2 kitchen
-    # you can now try to also have it move up or down:
-    duofern_cli.py --up kitchen
+Pairing Devices
+===============
 
-Hopefully you now have working command line interface that knows how to move up or down your shutters. But the python
-interface can do more, (which I was so far too lazy to expose via the command line):
+Pairing is done via starting the addon, basically it just runs::
 
-Indexing paired blinds
-----------------------
-If you have the system code of your system but lost the list of configured blinds you can use the CLI to refresh
-the config file with all paired blinds.::
+    python3 /share/pyduofern/scripts/duofern_cli.py --configfile /config/duofern.json --device /dev/ttyUSB2 --pair --pairtime 60
 
-    # assuming you lost the config file
-    duofern_cli.py --code <your code> --refresh --refreshtime 60
+Renaming is currently not supported via addon, I just change the names manually in::
 
-will start up the stick and listen for connecting blinds for 60 seconds. It will store all the blinds that were found
-in the default config file.a
+    config/duofern.json
+    ...
+    "devices": [
+        {
+            "id": "123456",
+            "name": "YourName"
+        }
+    ],
+
+
+Indexing paired blinds is not supported yet
 
 Usage with Homeassistant
 ========================
-Find an example code for using these blinds with homeassistant in the examples folder
 
+Just add the roller shutters to your configuration::
+    
+    cover.yourname
 
-Usage from python
-=================
-.. code-block:: python
-
-    from pyduofern.duofern_stick import DuofernStick
-    import time
-    stick = DuofernStick(device="/dev/duofernstick") # by default looks for /dev/duofernstick
-    stick_initialize() # do some initialization sequence with the stick
-    stick.start() # start the stick in a thread so it keeps communicating with your blinds
-    time.sleep(10) # let it settle to be able to talk to your blinds.
-    # your code here
-    # this uses internal variables of the duofern parser module and likely I will wrap it in
-    # the future.
-
-    print(stick.duofern_parser.modules['by_code']['1ff1d3']['position'])
-
-    command("1ff1d3", "up") # open the blind with code 1ff1d3
-
-    stick.command("1ff1d3", "down") # down the blind with code 1ff1d3
-
-    stick.command("1ff1d3", "stop") # stop the blind with code 1ff1d3
-
-    stick.command("1ff1d3", "position", 30) # set position of the blind with code 1ff1d3 to 30%
-
-Look for an indication of possible commands in ``pyduofern/definitions.py``
-I just translated them into python and did not explore what might be possible.
-It looks like a lot of functionality requires a weather station, but you can just as
-easily automate the stuff using your home automation and having it send the up and down
-commands instead of buying a weather station.
 
 Changelog
 =========
