@@ -97,7 +97,13 @@ Usage with Homeassistant
 Just add the roller shutters to your configuration::
     
     cover.yourname
+    
+Known issues
+============
 
+During initial setup I had issues pairing via addon while the duofern custom component was already configured.
+Maybe the addon couldn't use the DuoFern Stick since it was already in use by the custom component.
+If you experience this issue just remove the DuoFern component from the HA config and restart.
 
 Changelog
 =========
