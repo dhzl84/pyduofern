@@ -97,23 +97,3 @@ Usage with Homeassistant
 Just add the roller shutters to your configuration::
     
     cover.yourname
-    
-Known issues
-============
-
-During initial setup I had issues pairing via addon while the duofern custom component was already configured.
-Maybe the addon couldn't use the DuoFern Stick since it was already in use by the custom component.
-If you experience this issue just remove the DuoFern component from the HA config and restart.
-
-Changelog
-=========
-
-**0.22**
-- Added recording of actions for replay in integration tests
-- Improved unit tests
-- Enable travis
-- Enable coveralls
-
-**0.21.1**
-- fixed bug where device IDs containing `cc` would be be messed up when inserting channel number.
-
